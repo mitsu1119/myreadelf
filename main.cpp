@@ -10,6 +10,7 @@ int main(int args, char *argv[]) {
     }
 
     mf.printSections();
+    mf.printSymbols();
 
     return 0;
 }
