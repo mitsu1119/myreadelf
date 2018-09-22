@@ -15,6 +15,7 @@ myElf::myElf(char *fileName) {
         s.copy(this->head, s.size());
 
         this->ehdr = (Elf64_Ehdr *)head;
+        this->shstr = (Elf64_Shdr *)(head + this->ehdr->e_shoff + this->ehdr->e_shentsize * this->ehdr->e_shstrndx);
 
         ifs.close();
     }
@@ -22,6 +23,18 @@ myElf::myElf(char *fileName) {
 
 myElf::~myElf() {
     delete[] head;
+}
+
+/*
+ * printSections
+ */
+void myElf::printSections() {
+    Elf64_Shdr *shdr;
+    std::cout << "Sections:" << std::endl;
+    for(int i=0; i < this->ehdr->e_shnum; i++) {
+        shdr = (Elf64_Shdr *)(this->head + this->ehdr->e_shoff + this->ehdr->e_shentsize * i);
+        std::cout << "    " << (char *)(this->head + this->shstr->sh_offset + shdr->sh_name) << std::endl;
+    }
 }
 
 /*
