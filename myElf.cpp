@@ -31,7 +31,7 @@ myElf::~myElf() {
  */
 Elf64_Shdr *myElf::getShdr(const char *name) {
     Elf64_Shdr *shdrL = this->shdr;
-    Elf64_Shdr *shstr = (Elf64_Shdr *)((char *)this->shdr + this->ehdr->e_shentsize * this->ehdr->e_shstrndx);
+    Elf64_Shdr *shstr = getShstrtab();
     char *sectionName;
 
     for(int i=0; i < this->ehdr->e_shnum; i++) {
@@ -47,7 +47,7 @@ Elf64_Shdr *myElf::getShdr(const char *name) {
  */
 void myElf::printSections() {
     Elf64_Shdr *shdrL = this->shdr;
-    Elf64_Shdr *shstr = (Elf64_Shdr *)((char *)this->shdr + this->ehdr->e_shentsize * this->ehdr->e_shstrndx);
+    Elf64_Shdr *shstr = getShstrtab();
     char *sectionName;
 
     std::cout << "Sections:" << std::endl;

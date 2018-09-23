@@ -22,6 +22,12 @@ private:
 
     // セクション名からセクションヘッダを所得
     Elf64_Shdr *getShdr(const char *name);
+
+    // shstrtab セクションの所得
+    Elf64_Shdr *getShstrtab() {
+        return (Elf64_Shdr *)((char *)this->shdr + this->ehdr->e_shentsize * this->ehdr->e_shstrndx);
+    }
+
 public:
     bool isElf();
     void printSections();
