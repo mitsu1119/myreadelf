@@ -45,6 +45,32 @@ Elf64_Shdr *myElf::getShdr(const char *name) {
 /*
  * print
  */
+
+void myElf::printHeader() {
+    std::cout << "ELF Header:" << std::endl;
+    std::cout << "  Head:      ";
+    for(int b: this->ehdr->e_ident) printf(" %02x", b);
+    printf("\n");
+    printf("  Class:      %s\n", (this->ehdr->e_ident[EI_CLASS] == ELFCLASS64) ? "ELF64" :  "ELF32");
+    printf("  Data:       %s\n", (this->ehdr->e_ident[EI_DATA] == ELFDATA2LSB) ? "2's complement, little endian" : "2's complement, big endian");
+    printf("  Version:    0x%x%s\n", this->ehdr->e_ident[EI_VERSION], (this->ehdr->e_ident[EI_VERSION] == EV_CURRENT) ? " (current)" : " (non current)");
+    printf("  OS/ABI:     %s\n", OSABI2str(this->ehdr->e_ident[EI_OSABI]));
+    printf("  ABIversion: 0x%x\n", this->ehdr->e_ident[EI_ABIVERSION]);
+    printf("  Type:       %s\n", elfType2str(this->ehdr->e_type));
+    printf("  Machine:    %s\n", elfMachine2str(this->ehdr->e_machine));
+    printf("  Version:    0x%x%s\n",this->ehdr->e_version, (this->ehdr->e_version == EV_CURRENT) ? " (current)" : " (non current)");
+    printf("  Entry point address:               0x%x\n", this->ehdr->e_entry);
+    printf("  Start of program header:           0x%x\n", this->ehdr->e_phoff);
+    printf("  Start of section header:           0x%x\n", this->ehdr->e_shoff);
+    printf("  Flags:                             0x%x\n", this->ehdr->e_flags);
+    printf("  Size of this header:               0x%x\n", this->ehdr->e_ehsize);
+    printf("  Size of program headers:           0x%x\n", this->ehdr->e_phentsize);
+    printf("  Number of program headers:         %d\n", this->ehdr->e_phnum);
+    printf("  Size of section headers:           0x%x\n", this->ehdr->e_shentsize);
+    printf("  Number of section headers:         %d\n", this->ehdr->e_shnum);
+    printf("  Section header string table index: %d\n", this->ehdr->e_shstrndx);
+}
+
 void myElf::printSections() {
     Elf64_Shdr *shdrL = this->shdr;
     Elf64_Shdr *shstr = getShstrtab();
@@ -60,11 +86,10 @@ void myElf::printSections() {
 
 void myElf::printSegments() {
     Elf64_Phdr *phdrL = this->phdr;
-    elfTable search;
     std::cout << "Segments:" << std::endl;
 
     for(int i=0; i < this->ehdr->e_phnum; i++) {
-        std::cout << search.phdrType2str(phdrL->p_type) << std::endl;
+        std::cout << phdrType2str(phdrL->p_type) << std::endl;
         phdrL = (Elf64_Phdr *)((char *)phdrL + this->ehdr->e_phentsize);
     }
 }

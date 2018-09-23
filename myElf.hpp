@@ -8,10 +8,10 @@
 #include <cstring>
 #include <cstdio>
 
-class elfTable {
-public:
-    const char *phdrType2str(int type);
-};
+const char *OSABI2str(int OSABI);
+const char *phdrType2str(int type);
+const char *elfType2str(int elfType);
+const char *elfMachine2str(int elfMachine);
 
 class myElf {
 private:
@@ -30,6 +30,7 @@ private:
 
 public:
     bool isElf();
+    void printHeader();
     void printSections();
     void printSegments();
     void printSymbols();
