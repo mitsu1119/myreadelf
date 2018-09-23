@@ -17,6 +17,7 @@ class myElf {
 private:
     char *head;
     Elf64_Ehdr *ehdr;
+    Elf64_Shdr *shdr;
     Elf64_Shdr *shstr;
     Elf64_Phdr *phdr;
 
