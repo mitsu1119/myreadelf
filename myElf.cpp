@@ -63,31 +63,28 @@ void myElf::printSegments() {
     elfTable search;
     std::cout << "Segments:" << std::endl;
 
-    for(int i=0; i< this->ehdr->e_phnum; i++) {
+    for(int i=0; i < this->ehdr->e_phnum; i++) {
         std::cout << search.phdrType2str(phdrL->p_type) << std::endl;
         phdrL = (Elf64_Phdr *)((char *)phdrL + this->ehdr->e_phentsize);
     }
 }
 
 void myElf::printSymbols() {
-    Elf64_Shdr *shdrL;
-    Elf64_Sym *symb;
-    char *symname;
     std::cout << "Symbols:" << std::endl;
 
-    // .strtab セクションの shdr を所得
     Elf64_Shdr *strtab = getShdr(".strtab");
+    Elf64_Shdr *symtab = getShdr(".symtab");
 
-    for(int i=0; i< this->ehdr->e_shnum; i++) {
-        shdrL = (Elf64_Shdr *)(this->head + this->ehdr->e_shoff + this->ehdr->e_shentsize * i);
-        if(shdrL->sh_type != SHT_SYMTAB) continue;
-        for(int j=0; j < shdrL->sh_size/shdrL->sh_entsize; j++) {
-            symb = (Elf64_Sym *)(this->head + shdrL->sh_offset + shdrL->sh_entsize * j);
-            if(!symb->st_name) continue;
-            symname = (char *)(this->head + strtab->sh_offset + symb->st_name);
-            printf("  [%d]   %s\n", j, symname);
+    Elf64_Sym *symb;
+    char *symbname;
+
+    symb = (Elf64_Sym *)(this->head + symtab->sh_offset);
+    for(int i=0; i < symtab->sh_size/symtab->sh_entsize; i++) {
+        if(symb->st_name) {
+            symbname = (char *)(this->head + strtab->sh_offset + symb->st_name);
+            printf("  [%d]   %s\n", i, symbname);
         }
-        break;
+        symb = (Elf64_Sym *)((char *)symb +symtab->sh_entsize);
     }
 }
 

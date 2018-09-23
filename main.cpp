@@ -8,9 +8,6 @@ int main(int args, char *argv[]) {
         std::cerr << "This file is not ELF." << std::endl;
         return -1;
     }
-
-    mf.printSections();
-    mf.printSegments();
     mf.printSymbols();
 
     return 0;
