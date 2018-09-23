@@ -9,8 +9,7 @@ int main(int args, char *argv[]) {
         return -1;
     }
 
-    mf.printSections();
-    mf.printSymbols();
+    mf.printSegments();
 
     return 0;
 }

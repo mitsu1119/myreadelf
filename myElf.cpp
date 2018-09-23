@@ -16,6 +16,7 @@ myElf::myElf(char *fileName) {
 
         this->ehdr = (Elf64_Ehdr *)head;
         this->shstr = (Elf64_Shdr *)(head + this->ehdr->e_shoff + this->ehdr->e_shentsize * this->ehdr->e_shstrndx);
+        this->phdr = (Elf64_Phdr *)(head + this->ehdr->e_phoff);
 
         ifs.close();
     }
@@ -28,7 +29,7 @@ myElf::~myElf() {
 /*
  * getShdr
  */
-Elf64_Shdr *myElf::getShdr(char *name) {
+Elf64_Shdr *myElf::getShdr(const char *name) {
     Elf64_Shdr *shdr;
     char *sectionName;
     for(int i=0; i < this->ehdr->e_shnum; i++) {
@@ -50,6 +51,16 @@ void myElf::printSections() {
         shdr = (Elf64_Shdr *)(this->head + this->ehdr->e_shoff + this->ehdr->e_shentsize * i);
         sectionName = (char *)(this->head + this->shstr->sh_offset + shdr->sh_name);
         printf("  [%d]   %s\n", i, sectionName);
+    }
+}
+
+void myElf::printSegments() {
+    Elf64_Phdr *buf;
+    elfTable search;
+    std::cout << "Segments:" << std::endl;
+    for(int i=0; i< this->ehdr->e_phnum; i++) {
+        buf = (Elf64_Phdr *)(this->head + this->ehdr->e_phoff + this->ehdr->e_phentsize * i);
+        std::cout << search.phdrType2str(buf->p_type) << std::endl;
     }
 }
 
