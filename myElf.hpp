@@ -24,9 +24,15 @@ private:
     // セクション名からセクションヘッダを所得
     Elf64_Shdr *getShdr(const char *name);
 
-    // shstrtab セクションの所得
+    // .shstrtab セクションの所得
     Elf64_Shdr *getShstrtab() {
         return (Elf64_Shdr *)((char *)this->shdr + this->ehdr->e_shentsize * this->ehdr->e_shstrndx);
+    }
+
+    // .shstrtab セクションの名前を所得
+    char *getnameInShstrtab(int shdr_sh_name) {
+        Elf64_Shdr *shstr = getShstrtab();
+        return (char *)(this->head + shstr->sh_offset + shdr_sh_name);
     }
 
 public:

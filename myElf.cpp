@@ -110,6 +110,30 @@ void myElf::printSegments() {
         printf("\n");
         phdrL = (Elf64_Phdr *)((char *)phdrL + this->ehdr->e_phentsize);
     }
+    printf("\n");
+
+    // show sections in any segments
+    Elf64_Shdr *shdrL;
+    Elf64_Shdr *shstr = getShstrtab();
+    char *sectionName;
+    int size;
+    phdrL = this->phdr;
+    for(int i=0; i < this->ehdr->e_phnum; i++) {
+        // search section headers
+        printf("  [%d]  ", i);
+
+        shdrL = this->shdr;
+        for(int j=0; j < this->ehdr->e_shnum; j++) {
+            size = (shdrL->sh_type != SHT_NOBITS) ? shdrL->sh_size : 0;
+            if(shdrL->sh_offset >= phdrL->p_offset && shdrL->sh_offset + size <= phdrL->p_offset + phdrL->p_filesz) {
+                sectionName = getnameInShstrtab(shdrL->sh_name);
+                printf("%s ", sectionName);
+            }
+            shdrL = (Elf64_Shdr *)((char *)shdrL + this->ehdr->e_shentsize);
+        }
+        printf("\n");
+        phdrL = (Elf64_Phdr *)((char *)phdrL + this->ehdr->e_phentsize);
+    }
 }
 
 void myElf::printSymbols() {
