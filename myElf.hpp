@@ -12,6 +12,7 @@ const char *OSABI2str(int OSABI);
 const char *phdrType2str(int type);
 const char *elfType2str(int elfType);
 const char *elfMachine2str(int elfMachine);
+const char *sectionType2str(int sectionType);
 
 class myElf {
 private:

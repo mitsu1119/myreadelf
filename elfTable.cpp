@@ -69,3 +69,27 @@ const char *phdrType2str(int type) {
     default:            return "invalid";
     }
 }
+
+const char *sectionType2str(int sectionType) {
+    switch(sectionType) {
+    case SHT_NULL:      return "NULL";
+    case SHT_PROGBITS:  return "PROGBITS";
+    case SHT_SYMTAB:    return "SYMTAB";
+    case SHT_STRTAB:    return "STRTAB";
+    case SHT_RELA:      return "RELA";
+    case SHT_HASH:      return "HASH";
+    case SHT_DYNAMIC:   return "DYNAMIC";
+    case SHT_NOTE:      return "NOTE";
+    case SHT_NOBITS:    return "NOBITS";
+    case SHT_REL:       return "REL";
+    case SHT_SHLIB:     return "SHLIB";
+    case SHT_DYNSYM:    return "DYNSYM";
+    case SHT_INIT_ARRAY:return "INIT_ARRAY";
+    case SHT_FINI_ARRAY:return "FINI_ARRAY";
+    case SHT_GNU_HASH:  return "GNU_HASH";
+    case SHT_GNU_verdef:return "GNU_VERDEF";
+    case SHT_GNU_verneed:return "GNU_VERNEED";
+    case SHT_GNU_versym:return "GNU_VERSYM";
+    default:            return "Unknown...";
+    }
+}

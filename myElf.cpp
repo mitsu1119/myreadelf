@@ -79,7 +79,14 @@ void myElf::printSections() {
     std::cout << "Sections:" << std::endl;
     for(int i=0; i < this->ehdr->e_shnum; i++) {
         sectionName = (char *)(this->head + shstr->sh_offset + shdrL->sh_name);
-        printf("  [%d]   %s\n", i, sectionName);
+        printf("  [%d]  %s", i, sectionName);
+        printf("  %s", sectionType2str(shdrL->sh_type));
+        printf("  0x%016x", shdrL->sh_addr);
+        printf("  0x%08x", shdrL->sh_offset);
+        printf("  0x%016x", shdrL->sh_size);
+        printf("  0x%016x", shdrL->sh_entsize);
+
+        printf("\n");
         shdrL = (Elf64_Shdr *)((char *)shdrL + this->ehdr->e_shentsize);
     }
 }
@@ -89,7 +96,18 @@ void myElf::printSegments() {
     std::cout << "Segments:" << std::endl;
 
     for(int i=0; i < this->ehdr->e_phnum; i++) {
-        std::cout << phdrType2str(phdrL->p_type) << std::endl;
+        printf("  %s", phdrType2str(phdrL->p_type));
+        printf("  0x%016x", phdrL->p_offset);
+        printf("  0x%016x", phdrL->p_vaddr);
+        printf("  0x%016x", phdrL->p_paddr);
+        printf("  0x%016x", phdrL->p_filesz);
+        printf("  0x%016x", phdrL->p_memsz);
+        printf("  %c", phdrL->p_flags & PF_R ? 'R' : ' ');
+        printf("%c", phdrL->p_flags & PF_W ? 'W' : ' ');
+        printf("%c", phdrL->p_flags & PF_X ? 'E' : ' ');
+        printf("  0x%x", phdrL->p_align);
+
+        printf("\n");
         phdrL = (Elf64_Phdr *)((char *)phdrL + this->ehdr->e_phentsize);
     }
 }

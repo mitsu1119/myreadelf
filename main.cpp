@@ -8,7 +8,9 @@ int main(int args, char *argv[]) {
         std::cerr << "This file is not ELF." << std::endl;
         return -1;
     }
-    mf.printHeader();
+    // mf.printHeader();
+    // mf.printSections();
+    mf.printSegments();
 
     return 0;
 }
